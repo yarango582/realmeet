@@ -1,0 +1,42 @@
+/* Estilo para oscurecer el fondo alrededor de las cámaras con opacidad */
+.video-card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.9); /* Fondo oscuro semitransparente con opacidad */
+  padding: 20px;
+  justify-content: center; /* Centra las cámaras horizontalmente */
+  align-content: center; /* Centra las cámaras verticalmente */
+}
+
+.camera-card {
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.camera-info {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0; /* Añade espacio vertical (1rem) y elimina el espacio horizontal (0) */
+}
+
+.camera-control-button {
+  margin: 0 0.5rem; /* Añade espacio horizontal entre los botones (0.5rem) */
+  border: none;
+  padding: 0.3rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.camera-control-button:hover {
+  background-color: #00cc63;
+}
+
+
+.user {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}

@@ -1,0 +1,89 @@
+/* Estilos generales */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.app-header {
+  text-align: center;
+  background-color: #00cc63;
+  color: #fff;
+  padding: 20px;
+  border-radius: 3px;
+}
+
+.app-navigation {
+  padding-top: 0.5rem;
+
+  .app-navigation__list-item-link {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: color 0.3s;
+    background-color: #00cc63;
+    padding: 6px 12px;
+    display: block;
+    border-radius: 6px;
+
+    &:hover {
+      background-color: #009955;
+    }
+  }
+
+  .app-navigation__list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+
+    .app-navigation__list-item {
+      margin: 0 20px;
+    }
+  }
+}
+
+.app-content {
+  padding: 20px;
+}
+
+/* Estilos específicos para móviles */
+@media (max-width: 767px) {
+  .app-container {
+    padding: 10px;
+    text-align: center;
+  }
+
+  .app-header {
+    font-size: 24px;
+  }
+
+  .app-navigation__list {
+    flex-direction: column;
+
+    .app-navigation__list-item {
+      padding: 10px 10px;
+    }
+  }
+}
+
+/* Estilos específicos para computadoras */
+@media (min-width: 768px) {
+  .app-container {
+    padding: 20px;
+    text-align: center;
+  }
+
+  .app-header {
+    font-size: 32px;
+  }
+}
