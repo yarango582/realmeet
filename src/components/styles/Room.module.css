@@ -44,3 +44,19 @@
   width: 100%;
   height: auto;
 }
+
+.copyButton {
+  padding: 10px 20px;
+  margin-top: 10px;
+  font-size: 1rem;
+  color: white;
+  background-color: #4CAF50; /* Un tono de verde */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.copyButton:hover {
+  background-color: #45a049; /* Un tono de verde un poco más oscuro para el hover */
+}
