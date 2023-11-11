@@ -1,0 +1,30 @@
+/* App.module.css */
+.appContainer {
+  text-align: center;
+  background-color: #ecfdf5; /* Un tono claro de verde como fondo de toda la app */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: calc(10px + 2vmin);
+  color: #064e3b;
+}
+
+.nav {
+  background-color: #047857; /* Un tono más oscuro de verde para la barra de navegación */
+  width: 100%;
+  padding: 10px 0;
+}
+
+.navLink {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.navLink:hover {
+  color: #10b981; /* Un tono de verde ligeramente más claro para el hover */
+}

@@ -1,17 +1,24 @@
-import { AppRouter } from "./router/Router";
-import "./App.css";
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Home from './components/Home';
+import Room from './components/Room';
+import appStyles from './styles/App.module.css';
 
-const App = () => {
+function App() {
   return (
-    <div className="app-container">
-      <main className="app-content">
-        <header className="app-header">
-          <h1>Realmeet</h1>
-        </header>
-        <AppRouter />
-      </main>
-    </div>
+    <Router>
+      <div className={appStyles.appContainer}>
+        <nav className={appStyles.nav}>
+          <Link to="/" className={appStyles.navLink}>
+            Home
+          </Link>
+        </nav>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/room/:roomId" element={<Room />} />
+        </Routes>
+      </div>
+    </Router>
   );
-};
+}
 
 export default App;

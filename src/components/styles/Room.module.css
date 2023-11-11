@@ -1,0 +1,46 @@
+.roomContainer {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.videoContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.video {
+  background-color: black;
+  width: 100%; /* Ajuste inicial, será sobrescrito por JavaScript según la cantidad de videos */
+  max-width: 500px; /* Para evitar que los videos sean demasiado grandes */
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.videos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.videoWrapper {
+  border-radius: 8px;
+  overflow: hidden;
+  width: 70%; /* Tamaño del contenedor del video remoto */
+  aspect-ratio: 16 / 9;
+}
+
+.localVideo {
+  width: 100%;
+  height: auto;
+}
+
+.remoteVideo {
+  width: 100%;
+  height: auto;
+}
