@@ -1,3 +1,8 @@
+:root {
+  --primary-color: #001411;
+  --secondary-color: #10b981;
+}
+
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 p {
   color: gray;

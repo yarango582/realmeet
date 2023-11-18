@@ -1,15 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
-import Peer from 'peerjs';
+import { useParams } from 'react-router-dom';
 import styles from './styles/Room.module.css';
 import Alert from '../common/Alert';
 
 const Room: React.FC = () => {
   const { roomId } = useParams<{ roomId: string }>();
-  const location = useLocation();
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
-  const [peer, setPeer] = useState<Peer | null>(null);
+  const ws = useRef<WebSocket | null>(null);
+  const peerConnection = useRef<RTCPeerConnection | null>(null);
   const [isHost, setIsHost] = useState<boolean>(false);
   const [alert, setAlert] = useState<{ show: boolean; message: string }>({
     show: false,
@@ -17,73 +16,93 @@ const Room: React.FC = () => {
   });
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const isHostParam = searchParams.get('host') === 'true';
-    const newPeer = new Peer("", {
-      // Opciones de configuración de PeerJS...
-    });
+    setIsHost(sessionStorage.getItem("isHost") === "true");
+    const pcConfig: RTCConfiguration = {
+      iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+    };
 
-    setPeer(newPeer);
+    peerConnection.current = new RTCPeerConnection(pcConfig);
 
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
-      if (localVideoRef.current) {
-        localVideoRef.current.srcObject = stream;
+    peerConnection.current.ontrack = (event) => {
+      if (remoteVideoRef.current) {
+        remoteVideoRef.current.srcObject = event.streams[0];
       }
+    };
 
-      if (!isHostParam) {
-        const hostPeerId = prompt("Por favor, ingresa la contraseña de la sala:");
-        if (hostPeerId) {
-          connectToHost(newPeer, hostPeerId, stream);
+    ws.current = new WebSocket(import.meta.env.VITE_WS_SERVER);
+    ws.current.onopen = () => {
+      console.log("Connected to WebSocket server");
+      ws.current?.send(JSON.stringify({ type: "join", roomId }));
+    };
+
+    ws.current.onmessage = (message) => {
+      const parsedMessage = JSON.parse(message.data);
+      switch (parsedMessage.type) {
+        case 'offer':
+          handleOffer(parsedMessage.offer);
+          break;
+        case 'answer':
+          handleAnswer(parsedMessage.answer);
+          break;
+        case 'candidate':
+          handleNewICECandidate(parsedMessage.candidate);
+          break;
+        default:
+          console.error('Unknown message type:', parsedMessage.type);
+          break;
+      }
+    };
+
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      .then(stream => {
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = stream;
         }
-      }
-
-      newPeer.on('call', (call) => {
-        call.answer(stream);
-        call.on('stream', (remoteStream) => {
-          // Aquí manejarías el stream remoto
-          if (remoteVideoRef.current) {
-            remoteVideoRef.current.srcObject = remoteStream;
-          }
+        stream.getTracks().forEach(track => {
+          peerConnection.current?.addTrack(track, stream);
         });
+      }).catch(error => {
+        console.error('Error accessing media devices.', error);
       });
-    });
-
-    newPeer.on('open', (id) => {
-      setIsHost(isHostParam);
-      console.log(id);
-    });
 
     return () => {
-      newPeer.destroy();
+      ws.current?.close();
+      peerConnection.current?.close();
     };
-  }, [location.search]);
+  }, [roomId]);
 
-  const connectToHost = (peer: Peer, hostPeerId: string, stream: MediaStream) => {
-    const call = peer.call(hostPeerId, stream);
-    call.on('stream', (remoteStream) => {
-      // Aquí manejarías el stream remoto
-      if (remoteVideoRef.current) {
-        remoteVideoRef.current.srcObject = remoteStream;
-      }
-    });
+  const handleOffer = (offer: RTCSessionDescriptionInit) => {
+    peerConnection.current?.setRemoteDescription(new RTCSessionDescription(offer))
+      .then(() => {
+        return peerConnection.current?.createAnswer();
+      })
+      .then(answer => {
+        return peerConnection.current?.setLocalDescription(answer);
+      })
+      .then(() => {
+        ws.current?.send(JSON.stringify({
+          type: 'answer',
+          answer: peerConnection.current?.localDescription,
+          roomId
+        }));
+      });
+  };
+
+  const handleAnswer = (answer: RTCSessionDescriptionInit) => {
+    peerConnection.current?.setRemoteDescription(new RTCSessionDescription(answer));
+  };
+
+  const handleNewICECandidate = (candidate: RTCIceCandidateInit | undefined) => {
+    peerConnection.current?.addIceCandidate(new RTCIceCandidate(candidate));
   };
 
   const copyToClipboard = () => {
-    const roomUrl = window.location.href.split('?')[0]; // Obtiene la URL sin los parámetros de búsqueda
-    navigator.clipboard.writeText(roomUrl).then(() => {
-      setAlert({
-        show: true,
-        message:
-          "URL de la sala copiada al portapapeles.",
+    navigator.clipboard.writeText(window.location.href)
+      .then(() => setAlert({ show: true, message: "URL de la sala copiada al portapapeles." }))
+      .catch(err => {
+        console.error('Error al copiar la URL de la sala: ', err);
+        setAlert({ show: true, message: "Error al copiar la URL." });
       });
-    }, (err) => {
-      console.error('Error al copiar la URL de la sala: ', err);
-      setAlert({
-        show: true,
-        message:
-          "Error al copiar la URL.",
-      });
-    });
   };
 
   return (
@@ -96,14 +115,12 @@ const Room: React.FC = () => {
       )}
       <h1>Sala de Videoconferencia: {roomId}</h1>
       <div className={styles.videos}>
-        <div className={styles.videoWrapper} style={{ width: '50%' }}>
-          <video ref={localVideoRef} autoPlay playsInline muted className={styles.localVideo}></video>
-        </div>
-        <div className={styles.videoWrapper} style={{ width: '50%' }}>
-          <video ref={remoteVideoRef} autoPlay playsInline className={styles.remoteVideo}></video>
-        </div>
+        <video ref={localVideoRef} autoPlay playsInline muted className={styles.localVideo}></video>
+        <video ref={remoteVideoRef} autoPlay playsInline className={styles.remoteVideo}></video>
       </div>
-      {isHost && <p>Eres el anfitrión de esta sala. Esta es la contrasena: {peer?.id}</p>}
+      {isHost && (
+        <p>Eres el anfitrión de esta sala. Comparte la URL con los participantes.</p>
+      )}
       <button onClick={copyToClipboard} className={styles.copyButton}>
         Copiar URL de la Sala
       </button>

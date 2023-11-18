@@ -1,56 +1,71 @@
+/* Room.module.css */
+
 .roomContainer {
-  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.videoContainer {
-  display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
-}
-
-.video {
-  background-color: black;
-  width: 100%; /* Ajuste inicial, será sobrescrito por JavaScript según la cantidad de videos */
-  max-width: 500px; /* Para evitar que los videos sean demasiado grandes */
-  aspect-ratio: 16 / 9;
-  border-radius: 8px;
-  overflow: hidden;
+  padding: 20px;
+  height: 100vh;
 }
 
 .videos {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
+  width: 100%;
 }
 
 .videoWrapper {
-  border-radius: 8px;
-  overflow: hidden;
-  width: 70%; /* Tamaño del contenedor del video remoto */
-  aspect-ratio: 16 / 9;
-}
-
-.localVideo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  height: auto;
+  margin-bottom: 10px;
 }
 
+.localVideo,
 .remoteVideo {
-  width: 100%;
-  height: auto;
+  width: 90%;
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
 }
 
+/* Estilos para dispositivos móviles */
+@media (max-width: 768px) {
+  .localVideo,
+  .remoteVideo {
+    aspect-ratio: auto;
+  }
+}
+
+/* Estilos para dispositivos con pantallas más grandes */
+@media (min-width: 769px) {
+  .videos {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .localVideo {
+    width: 100%;
+    height: fit-content;
+  }
+
+  .remoteVideo {
+    width: 100%;
+    height: auto;
+    height: fit-content;
+  }
+}
+
+/* Botón para copiar la URL */
 .copyButton {
   padding: 10px 20px;
   margin-top: 10px;
   font-size: 1rem;
   color: white;
-  background-color: #4CAF50; /* Un tono de verde */
+  background-color: var(--secondary-color);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -58,5 +73,5 @@
 }
 
 .copyButton:hover {
-  background-color: #45a049; /* Un tono de verde un poco más oscuro para el hover */
+  background-color: #45a049;
 }

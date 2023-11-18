@@ -1,0 +1,72 @@
+
+.waitingRoom {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.cameraPreview {
+  border: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.camera {
+  width: 350px;
+  height: 350px;
+}
+
+.controls button {
+  grid-column: 1 / 3;
+  margin: 0 15px;
+}
+
+.inputs {
+  width: 80%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 10px;
+  margin-top: 20px;
+}
+
+.input {
+  text-align: center;
+}
+
+.button {
+  padding: 10px 20px;
+  margin-top: 10px;
+  font-size: 1rem;
+  color: white;
+  background-color: var(--secondary-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+/* estilos para desktop */
+
+@media (min-width: 769px) {
+
+  .inputs {
+    width: 30%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 10px;
+    margin-top: 20px;
+  }
+
+  .controls button {
+    grid-column: 1 / 3;
+    margin: 0 35px;
+  }
+
+}

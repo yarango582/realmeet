@@ -1,3 +1,4 @@
+// Home.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./styles/Home.module.css";
@@ -16,17 +17,17 @@ const Home: React.FC = () => {
     if (!name || !language) {
       setAlert({
         show: true,
-        message:
-          "Por favor, ingresa tu nombre y selecciona tu idioma de preferencia.",
+        message: "Por favor, ingresa tu nombre y selecciona tu idioma de preferencia.",
       });
       return;
     }
 
     const roomId = Date.now().toString();
-    localStorage.setItem("userName", name);
-    localStorage.setItem("userLanguage", language);
-    // Añadimos el query parameter 'host=true' para identificar al anfitrión
-    navigate(`/room/${roomId}?host=true`);
+    sessionStorage.setItem("userName", name);
+    sessionStorage.setItem("userLanguage", language);
+    sessionStorage.setItem("roomId", roomId);
+    sessionStorage.setItem("isHost", "true");
+    navigate(`/waiting-room/${roomId}`); // Redirige al anfitrión a la sala de espera
   };
 
   return (
@@ -50,9 +51,7 @@ const Home: React.FC = () => {
         onChange={(e) => setLanguage(e.target.value)}
         className={styles.select}
       >
-        <option value="" disabled>
-          Selecciona tu idioma...
-        </option>
+        <option value="" disabled>Selecciona tu idioma...</option>
         <option value="es">Español</option>
         <option value="en">Inglés</option>
       </select>
