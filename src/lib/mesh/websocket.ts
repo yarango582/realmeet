@@ -5,7 +5,7 @@ import {
   WebRtcAnswer,
   WebRtcIceCandidate,
   WebRtcOffer,
-} from "../../../lib/src/types/websockets";
+} from "../../../sdk/src/types/websockets";
 import { peersActions, SetPeers } from "../../atoms/peers";
 import { Local, localActions, SetLocal } from "../../atoms/local";
 import { createRtcPeerConnection } from "./webrtc";
