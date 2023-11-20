@@ -1,6 +1,6 @@
 import assert from "assert";
 import { Socket } from "socket.io-client";
-import { ClientEvents, ServerEvents } from "../../../sdk/src/types/websockets";
+import { ClientEvents, ServerEvents } from "realmeet.sdk";
 import { Local, LocalStreamKey } from "../../atoms/local";
 import { peersActions, SetPeers } from "../../atoms/peers";
 import { registerDataChannel } from "./data";

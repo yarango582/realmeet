@@ -5,7 +5,7 @@ import {
   WebRtcAnswer,
   WebRtcIceCandidate,
   WebRtcOffer,
-} from "../../../sdk/src/types/websockets";
+} from "realmeet.sdk";
 import { peersActions, SetPeers } from "../../atoms/peers";
 import { Local, localActions, SetLocal } from "../../atoms/local";
 import { createRtcPeerConnection } from "./webrtc";
